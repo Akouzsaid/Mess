@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام محادثات شبيه بواتساب</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #e5ddd5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .chat-container {
+            width: 90%;
+            max-width: 600px;
+            background-color: #fff;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .messages {
+            height: 400px;
+            overflow-y: auto;
+            padding: 15px;
+            background-color: #f7f8fc;
+        }
+
+        .message {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .message.sent {
+            justify-content: flex-end;
+        }
+
+        .message.received {
+            justify-content: flex-start;
+        }
+
+        .message-text {
+            padding: 10px 15px;
+            border-radius: 10px;
+            max-width: 70%;
+            word-wrap: break-word;
+            font-size: 14px;
+        }
+
+        .message.sent .message-text {
+            background-color: #dcf8c6;
+        }
+
+        .message.received .message-text {
+            background-color: #fff;
+            border: 1px solid #ddd;
+        }
+
+        .chat-footer {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            background-color: #ededed;
+            border-top: 1px solid #ccc;
+        }
+
+        .chat-footer input[type="text"] {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 20px;
+            outline: none;
+            background-color: #fff;
+            margin-right: 10px;
+            font-size: 14px;
+        }
+
+        .chat-footer .send-button,
+        .chat-footer .attach-button {
+            font-size: 20px;
+            color: #4CAF50;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+        .chat-footer .voice-button {
+            font-size: 20px;
+            color: #4CAF50;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="chat-container">
+    <div class="messages" id="messages">
+        <!-- الرسائل ستظهر هنا -->
+    </div>
+    <div class="chat-footer">
+        <input type="text" placeholder="اكتب رسالة..." id="message-input">
+        <i class="fas fa-paperclip attach-button" onclick="selectFile()"></i>
+        <i class="fas fa-microphone voice-button" onclick="startRecording()"></i>
+        <i class="fas fa-paper-plane send-button" onclick="sendMessage()"></i>
+    </div>
+</div>
+
+<script>
+    // دالة لإضافة رسالة
+    function sendMessage() {
+        const messageInput = document.getElementById('message-input');
+        const messageText = messageInput.value.trim();
+
+        if (messageText) {
+            addMessage(messageText, 'sent');
+            messageInput.value = ''; // تفريغ خانة الإدخال بعد الإرسال
+        }
+    }
+
+    // دالة لإضافة رسالة إلى HTML
+    function addMessage(text, type) {
+        const messagesDiv = document.getElementById('messages');
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message ${type}`;
+
+        const messageTextDiv = document.createElement('div');
+        messageTextDiv.className = 'message-text';
+        messageTextDiv.innerText = text;
+
+        messageDiv.appendChild(messageTextDiv);
+        messagesDiv.appendChild(messageDiv);
+        messagesDiv.scrollTop = messagesDiv.scrollHeight; // تمرير لآخر رسالة
+    }
+
+    // دالة لاختيار الملفات
+    function selectFile() {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.onchange = function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                addMessage(`ملف: ${file.name}`, 'sent');
+            }
+        };
+        input.click();
+    }
+
+    // دالة لبدء التسجيل الصوتي (تجريبي)
+    function startRecording() {
+        addMessage('بدأ التسجيل الصوتي...', 'sent');
+    }
+</script>
+
+</body>
+</html>
